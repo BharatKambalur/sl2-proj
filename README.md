@@ -1,5 +1,12 @@
 # sl2-proj
 
+Variable Names:
+
+RGB Image -> im
+SLIC Output -> segments
+GT Text Array -> gt
+
+
 Create a folder 'dataset' in the root folder.<br />
 Create the structure:<br />  dataset<br />
                            -> SYNTHIA_RAND_CVPR16<br />
