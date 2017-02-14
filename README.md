@@ -2,9 +2,9 @@
 
 Variable Names:
 
-RGB Image -> im
-SLIC Output -> segments
-GT Text Array -> gt
+RGB Image -> im <br />
+SLIC Output -> segments<br />
+GT Text Array -> gt<br />
 
 
 Create a folder 'dataset' in the root folder.<br />
