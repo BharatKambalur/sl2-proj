@@ -104,15 +104,19 @@ for (i, segVal) in enumerate(np.unique(segments)):
      V_hist, xedges= np.histogram(v, bins = b, range =(0,1))
      
     # Store the feature vectors    
-     H_S_val= np.resize(H_S_hist,(1,b*b))
-     H_S_val= (H_S_val/sum(H_S_val))  
-     V_val= V_hist/sum(V_hist)
+     H_S_val= np.resize(H_S_hist,(1,b*b)).ravel()
+     H_S_val= (H_S_val)/(np.sum(H_S_val)) 
+     V_val= V_hist
      
      BigX.append(np.hstack((DCT_Patch,Centroid_Patch,H_S_val,V_val)))
      BigY.append(class_label_seg)
     
 
      
-    
+from sklearn.ensemble import RandomForestClassifier
+model= RandomForestClassifier()
+model.fit(BigX, BigY)
+predicted= model.predict(BigX)
+error_count=np.sum(predicted!=BigY)
    
     
