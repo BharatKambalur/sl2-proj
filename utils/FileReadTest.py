@@ -9,8 +9,8 @@ import os
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\' # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
 
-list_start = 0
-list_end = 9
+list_start = 1100
+list_end = 1399
 
 numSegments = 1000
 
@@ -33,5 +33,5 @@ for im_no in range(list_start, list_end+1):
 
 end_time = time.time()
 
-print '{0} Files Processed. Time Taken: {1}'.format(list_end-list_start+1, end_time-start_time)
+print ('{0} Files Processed. Time Taken: {1}'.format(list_end-list_start+1, end_time-start_time))
 
