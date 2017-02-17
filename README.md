@@ -6,6 +6,8 @@ RGB Image -> im <br />
 SLIC Output -> segments<br />
 GT Text Array -> gt<br />
 Gray Image -> im_g<br />
+BigX -> Observation matrix with all training examples and corresponding features<br />
+BigY -> Matrix with class labels<br />
 
 Create a folder 'dataset' in the root folder.<br />
 Create the structure:<br />  dataset<br />
