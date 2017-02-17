@@ -13,7 +13,7 @@ import os
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\' # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
 
-SLIC_File_Name = 'ap_000_01-11-2015_19-20-57_000000_1_Rand_5.npy'
+SLIC_File_Name = 'ap_000_02-11-2015_08-27-21_000068_2_Rand_2.npy'
 
 ############################################
 

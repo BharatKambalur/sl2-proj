@@ -10,11 +10,6 @@ import sys
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\' # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
 
-list_start = 3000
-list_end = 3999
-
-numSegments = 1000
-
 ############################################
 
 #### Main Part of Program START ###########
