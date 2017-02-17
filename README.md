@@ -1,12 +1,12 @@
 # sl2-proj
 
 Classes:ID-R-G-B Values :
-LaneMarking:-1<br />
+LaneMarking:-1-255-255-255<br />
 Misc:0-0-0-0<br />
-Sky:1<br />
-Road:3<br />
-Sidewalk:4<br />
-Vegetation:6<br />
+Sky:1-132-112-255<br />
+Road:3-160-160-160<br />
+Sidewalk:4-200-200-200<br />
+Vegetation:6-124-252-0<br />
 
 Variable Names:
 
