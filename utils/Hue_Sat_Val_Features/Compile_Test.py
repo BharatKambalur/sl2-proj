@@ -48,7 +48,7 @@ im_g=rgb2gray(im)
 # Converting useless classes to misc
 
 for i in misc:
-    gt[gt == i] = 0
+ gt[gt == i] = 0
             
 
 # To store Class Labels
@@ -77,40 +77,51 @@ for (i, segVal) in enumerate(np.unique(segments)):
     
     
     #Obtain DCT Patch
-    if(cX-3>-1 and cY+5<721 and cX+5<961 and cY-3>-1):
-     DCT_Patch = (dct(dct(im_g[cY-3:cY+5,cX-3:cX+5], axis=0), axis=1).ravel()).reshape(1,64).ravel()
+    if(cX-3<0):
+       cX=3
      
-     Centroid_Patch=np.array([cX,cY])
+    if(cY-3<0):
+       cY=3
+     
+    if(cX+5>960):
+       cX=954
+    
+    if(cY+5>720):
+        cY=714
+     
+    DCT_Patch = (dct(dct(im_g[cY-3:cY+5,cX-3:cX+5], axis=0), axis=1).ravel()).reshape(1,64).ravel()
+     
+    Centroid_Patch=np.array([cX,cY])
      
     ##HSV
     # Mask only the required locaitons from the image
-     spat_cord_seg = np.array(np.where(segments == segVal))
-     hsv_values_seg = image_hsv[spat_cord_seg[0,:],spat_cord_seg[1,:]]
-
+    spat_cord_seg = np.array(np.where(segments == segVal))
+    hsv_values_seg = image_hsv[spat_cord_seg[0,:],spat_cord_seg[1,:]]
+    
     # Get Corresponding Class Number 
-     spat_cord_seg_GT = gt[spat_cord_seg[0,:],spat_cord_seg[1,:]];
-     unique_val_GT, count_seg_GT = np.unique(spat_cord_seg_GT, return_counts = True);
-     class_label_seg = unique_val_GT[np.argmax(count_seg_GT)]                                           
-
+    spat_cord_seg_GT = gt[spat_cord_seg[0,:],spat_cord_seg[1,:]];
+    unique_val_GT, count_seg_GT = np.unique(spat_cord_seg_GT, return_counts = True);
+    class_label_seg = unique_val_GT[np.argmax(count_seg_GT)]                                           
+    
      # Retrive the HSV values for each pixel postition in the segment
-     h = hsv_values_seg[:,0]
-     s = hsv_values_seg[:,1]
-     v = hsv_values_seg[:,2]
-
+    h = hsv_values_seg[:,0]
+    s = hsv_values_seg[:,1]
+    v = hsv_values_seg[:,2]
+    
     # Create a 2D histogram with num of bins b = 10, for HUE and SATURATION
-     H_S_hist, xedges, yedges = np.histogram2d(h, s, bins=b, range = [[0,1],[0,1]])
+    H_S_hist, xedges, yedges = np.histogram2d(h, s, bins=b, range = [[0,1],[0,1]])
      
     # OneD histogram with num of bins b = 10
-     V_hist, xedges= np.histogram(v, bins = b, range =(0,1))
+    V_hist, xedges= np.histogram(v, bins = b, range =(0,1))
      
     # Store the feature vectors    
-     H_S_val= np.resize(H_S_hist,(1,b*b)).ravel()
-     H_S_val= (H_S_val)/(np.sum(H_S_val)) 
-     V_val= V_hist
+    H_S_val= np.resize(H_S_hist,(1,b*b)).ravel()
+    H_S_val= (H_S_val)/(np.sum(H_S_val)) 
+    V_val= V_hist
      
-     BigX.append(np.hstack((DCT_Patch,Centroid_Patch,H_S_val,V_val)))
-     BigY.append(class_label_seg)
-    
+    BigX.append(np.hstack((DCT_Patch,Centroid_Patch,H_S_val,V_val)))
+    BigY.append(class_label_seg)
+
 
      
 from sklearn.ensemble import RandomForestClassifier
