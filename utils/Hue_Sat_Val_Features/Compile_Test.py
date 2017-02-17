@@ -95,14 +95,15 @@ for (i, segVal) in enumerate(np.unique(segments)):
     ##HSV
     # Mask only the required locaitons from the image
     spat_cord_seg = np.array(np.where(segments == segVal))
-    hsv_values_seg = image_hsv[spat_cord_seg[0,:],spat_cord_seg[1,:]]
+
     
     # Get Corresponding Class Number 
     spat_cord_seg_GT = gt[spat_cord_seg[0,:],spat_cord_seg[1,:]];
     unique_val_GT, count_seg_GT = np.unique(spat_cord_seg_GT, return_counts = True);
     class_label_seg = unique_val_GT[np.argmax(count_seg_GT)]                                           
-    
-     # Retrive the HSV values for each pixel postition in the segment
+
+    # Retrive the HSV values for each pixel postition in the segment
+    hsv_values_seg = image_hsv[spat_cord_seg[0,:],spat_cord_seg[1,:]]
     h = hsv_values_seg[:,0]
     s = hsv_values_seg[:,1]
     v = hsv_values_seg[:,2]

@@ -74,6 +74,8 @@ else:
     print('GT Text File Read Error. File Name : {}'.format(list_files_RGB[0].rsplit(".",1)[0] + '.txt'))
 
 #%%
+#test_arr = []
+
 im_g = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY);
 im_g_h=cv2.equalizeHist(im_g)
 
@@ -143,6 +145,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
         gab_var.append(np.var(conv_vals))
     #[gab_mean_arr, gab_var_Arr] = get_gabor_features(req_region,bin_patch,kernels)
     gab_feat = np.concatenate((gab_mean,gab_var))
+    #test_arr.append(gab_feat)
     #print(gab_mean_arr)
     #print(gab_var_Arr)
 end_time = time.time()
