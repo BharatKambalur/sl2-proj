@@ -1,5 +1,13 @@
 # sl2-proj
 
+Classes:ID-R-G-B Values :
+LaneMarking:-1<br />
+Misc:0-0-0-0<br />
+Sky:1<br />
+Road:3<br />
+Sidewalk:4<br />
+Vegetation:6<br />
+
 Variable Names:
 
 RGB Image -> im <br />
