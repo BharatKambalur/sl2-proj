@@ -47,8 +47,7 @@ im_g=rgb2gray(im)
 
 # Converting useless classes to misc
 
-for i in misc:
- gt[gt == i] = 0
+gt[gt==misc]=0
             
 
 # To store Class Labels
