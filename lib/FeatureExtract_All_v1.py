@@ -176,8 +176,8 @@ for im_no in range(batch_start, batch_end+1):
         BigY.append(class_label_seg)
 
     # Save the obtained feature vector and the class label vector (which corresponds to each segment)
-    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.feat'
-    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.label'
+    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
 
     np.save(feat_path, np.array(BigX))
     np.save(label_path, np.array(BigY))
