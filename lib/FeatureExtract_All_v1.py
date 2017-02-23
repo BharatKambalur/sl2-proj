@@ -159,7 +159,7 @@ for im_no in range(batch_start, batch_end+1):
         x_vals, y_vals = np.where(bin_patch == 1)
         gab_mean = []
         gab_var = []
-        for k_num in xrange(len(kernels)):
+        for k_num in range(len(kernels)):
             conv_op = fftconvolve(req_region,np.real(kernels[k_num]),mode='same')
             conv_vals = conv_op[x_vals,y_vals]
             gab_mean.append(np.mean(conv_vals))
