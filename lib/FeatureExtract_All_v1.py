@@ -9,8 +9,8 @@ from scipy.signal import fftconvolve
 
 ############################################# PARAMETER DEFINITION #####################################################
 
-batch_start = 0
-batch_end = 1
+batch_start = 5000
+batch_end = 5001
 
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
@@ -94,7 +94,7 @@ for im_no in range(batch_start, batch_end+1):
         ret,contours,hierarchy = cv2.findContours(mask, 1, 2)
 
         #Centroid
-        M = cv2.moments(contours[0])
+        M = cv2.moments(max(contours,key=len))
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
 

@@ -173,7 +173,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = np.np.sum(bin_patch)
+    area = np.sum(bin_patch)
     try:
         aspect_ratio = float(bin_patch.shape[0])/bin_patch.shape[1]
     except ZeroDivisionError:
