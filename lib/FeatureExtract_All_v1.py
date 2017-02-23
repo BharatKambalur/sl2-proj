@@ -18,7 +18,7 @@ gt_dir = '..\dataset\SYNTHIA_RAND_CVPR16\GTTXT\\'
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 
-misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
+#misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
 
 ########################################################################################################################
 
@@ -75,8 +75,8 @@ for im_no in range(batch_start, batch_end+1):
     im_g_h=cv2.equalizeHist(im_g2)
 
     # Converting unused classes to 'misc' class in Ground Truth
-    for i in misc:
-        gt[gt == i] = 0
+    # for i in misc:
+    #     gt[gt == i] = 0
 
     # Defining number of bins for histogram (Used to quantize H_S and V)
     nBins = 10
@@ -166,13 +166,21 @@ for im_no in range(batch_start, batch_end+1):
             gab_var.append(np.var(conv_vals))
         gab_feat = np.concatenate((gab_mean,gab_var)) # Stores the generated gabor feature vector
 
+        ############################ Code for Area and Aspect Ratio of Blob ##################################
+
+        area = np.sum(bin_patch)
+        try:
+            aspect_ratio = float(bin_patch.shape[0])/bin_patch.shape[1]
+        except ZeroDivisionError:
+            aspect_ratio = 0
+
         ########################## Obtain Class Number for Segment ##############################
 
         spat_cord_seg_GT = gt[spat_cord_seg[0,:],spat_cord_seg[1,:]]
         unique_val_GT, count_seg_GT = np.unique(spat_cord_seg_GT, return_counts = True)
         class_label_seg = unique_val_GT[np.argmax(count_seg_GT)]
 
-        BigX.append(np.hstack((DCT_Patch,Centroid_Patch,H_S_val,V_val,gab_feat)))
+        BigX.append(np.hstack((DCT_Patch,Centroid_Patch,H_S_val,V_val,gab_feat,area,aspect_ratio)))
         BigY.append(class_label_seg)
 
     # Save the obtained feature vector and the class label vector (which corresponds to each segment)

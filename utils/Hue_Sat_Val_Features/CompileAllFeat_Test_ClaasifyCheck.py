@@ -173,7 +173,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = np.sum(bin_patch)
+    area = np.np.sum(bin_patch)
     try:
         aspect_ratio = float(bin_patch.shape[0])/bin_patch.shape[1]
     except ZeroDivisionError:
@@ -313,7 +313,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = sum(bin_patch)
+    area = np.sum(bin_patch)
     aspect_ratio = bin_patch.shape[0]/bin_patch.shape[1]
 
     ########################## Obtain Class Number for Segment ##############################
@@ -449,7 +449,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = sum(bin_patch)
+    area = np.sum(bin_patch)
     aspect_ratio = bin_patch.shape[0]/bin_patch.shape[1]
 
     ########################## Obtain Class Number for Segment ##############################
@@ -585,7 +585,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = sum(bin_patch)
+    area = np.sum(bin_patch)
     aspect_ratio = bin_patch.shape[0]/bin_patch.shape[1]
 
     ########################## Obtain Class Number for Segment ##############################
@@ -721,7 +721,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
     ############################ Code for Area and Aspect Ratio of Blob ##################################
 
-    area = sum(bin_patch)
+    area = np.sum(bin_patch)
     aspect_ratio = bin_patch.shape[0]/bin_patch.shape[1]
 
     ########################## Obtain Class Number for Segment ##############################

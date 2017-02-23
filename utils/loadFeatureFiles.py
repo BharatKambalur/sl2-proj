@@ -18,7 +18,7 @@ batch_end = 1
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 
-misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
+#misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
 
 ########################################################################################################################
 
@@ -37,4 +37,5 @@ for im_no in range(batch_start, batch_end+1):
     Y = np.load(label_path)
     BigX = np.vstack((BigX,X))
     BigY = np.concatenate((BigY,Y))
+print(np.unique(BigY))
 a
