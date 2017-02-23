@@ -34,7 +34,7 @@ misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be la
                                               sigma_x=sigma, sigma_y=sigma))
                 kernels.append(kernel)
 
-print 'Starting Feature Extraction with List no {0} until {1}'.format(batch_start, batch_end)
+print ('Starting Feature Extraction with List no {0} until {1}'.format(batch_start, batch_end))
 
 start_time = time.time()
 
@@ -183,4 +183,4 @@ for im_no in range(batch_start, batch_end+1):
     np.save(label_path, np.array(BigY))
 
 end_time = time.time()
-print '{0} Files Processed. Time Taken: {1}'.format(batch_end-batch_start+1, end_time-start_time)
+print ('{0} Files Processed. Time Taken: {1}'.format(batch_end-batch_start+1, end_time-start_time))
