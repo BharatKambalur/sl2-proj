@@ -25,14 +25,14 @@ misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be la
 ########################################## MAIN PART OF CODE - START ###################################################
 
 # Generating the required Gabor Kernel (Multiple orientations, sigma and frequency)
-    kernels = []
-    for theta in range(6):
-        theta = theta / 6. * np.pi
-        for sigma in [3,5]:
-            for frequency in (0.15, 0.35):
-                kernel = np.real(gabor_kernel(frequency, theta=theta,
-                                              sigma_x=sigma, sigma_y=sigma))
-                kernels.append(kernel)
+kernels = []
+for theta in range(6):
+    theta = theta / 6. * np.pi
+    for sigma in [3,5]:
+        for frequency in (0.15, 0.35):
+            kernel = np.real(gabor_kernel(frequency, theta=theta,
+                                          sigma_x=sigma, sigma_y=sigma))
+            kernels.append(kernel)
 
 print ('Starting Feature Extraction with List no {0} until {1}'.format(batch_start, batch_end))
 
