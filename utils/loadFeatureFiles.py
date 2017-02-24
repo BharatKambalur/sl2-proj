@@ -10,7 +10,7 @@ from scipy.signal import fftconvolve
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
-batch_end = 9
+batch_end = 3
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 #SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
@@ -18,7 +18,7 @@ batch_end = 9
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 
-#misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
+misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
 
 ########################################################################################################################
 
@@ -42,10 +42,14 @@ print(np.unique(BigY))
 
 ##################################################################################################
 ###MAKE AND SAVE MODEL
+for i in misc:
+        BigY[BigY == i]=0
+
 from sklearn.ensemble import GradientBoostingClassifier
 import pickle
 model= GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
 model.fit(BigX, BigY)
+model.score(BigX, BigY)
 filename='..\dataset\SYNTHIA_RAND_CVPR16\MODEL\\trialmodel.sav'
 pickle.dump(model,open(filename,'wb'))
 
