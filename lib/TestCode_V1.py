@@ -17,8 +17,7 @@ import pickle
 import matplotlib.pyplot as plt
 ############################################# PARAMETER DEFINITION #####################################################
 
-batch_start = 5000
-batch_end = 5000
+batch_end = 5001
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
@@ -55,8 +54,8 @@ img=np.zeros([720,960,3],dtype=np.uint8)
 
 for im_no in range(batch_start, batch_end+1):
     ##NOTE!!! FEATURE NUMBERING STARTS FROM 0: SUBTRACT OUT EXTRA
-    feat_path = feat_dir + list_files_Feat[im_no-5000]
-    label_path = label_dir + list_files_Label[im_no-5000].split(".",1)[0]+".npy"
+    feat_path = feat_dir + list_files_Feat[im_no-batch_start]
+    label_path = label_dir + list_files_Label[im_no-batch_start].split(".",1)[0]+".npy"
     TestX = np.load(feat_path)
     TestY = np.load(label_path)
     
