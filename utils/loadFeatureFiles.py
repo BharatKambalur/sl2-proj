@@ -9,8 +9,8 @@ from scipy.signal import fftconvolve
 
 ############################################# PARAMETER DEFINITION #####################################################
 
-batch_start = 0
-batch_end = 9
+batch_start = 11000
+batch_end = 11020
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 #SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
@@ -18,7 +18,7 @@ batch_end = 9
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 
-#misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
+misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
 
 ########################################################################################################################
 
@@ -31,14 +31,15 @@ BigX = np.empty([0,num_feat])
 BigY = np.empty([0])
 
 for im_no in range(batch_start, batch_end+1):
-    feat_path = feat_dir + list_files_Feat[im_no]
-    label_path = label_dir + list_files_Feat[im_no].split(".",1)[0]+".npy"
+    feat_path = feat_dir + list_files_Feat[im_no-11000]
+    label_path = label_dir + list_files_Feat[im_no-11000].split(".",1)[0]+".npy"
     X = np.load(feat_path)
     Y = np.load(label_path)
     BigX = np.vstack((BigX,X))
     BigY = np.concatenate((BigY,Y))
 print(np.unique(BigY))
-
+for i in misc:
+    BigY[BigY == i] = 0
 
 ##################################################################################################
 ###MAKE AND SAVE MODEL
