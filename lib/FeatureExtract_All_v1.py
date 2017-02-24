@@ -10,7 +10,7 @@ from scipy.signal import fftconvolve
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 5000
-batch_end = 5001
+batch_end = 5010
 
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'

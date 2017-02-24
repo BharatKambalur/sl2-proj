@@ -10,7 +10,7 @@ from scipy.signal import fftconvolve
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
-batch_end = 1
+batch_end = 9
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 #SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
@@ -38,4 +38,15 @@ for im_no in range(batch_start, batch_end+1):
     BigX = np.vstack((BigX,X))
     BigY = np.concatenate((BigY,Y))
 print(np.unique(BigY))
-a
+
+
+##################################################################################################
+###MAKE AND SAVE MODEL
+from sklearn.ensemble import GradientBoostingClassifier
+import pickle
+model= GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
+model.fit(BigX, BigY)
+filename='..\dataset\SYNTHIA_RAND_CVPR16\MODEL\\trialmodel.sav'
+pickle.dump(model,open(filename,'wb'))
+
+
