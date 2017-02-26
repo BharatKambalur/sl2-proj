@@ -10,8 +10,8 @@ from scipy.signal import fftconvolve
 ############################################# PARAMETER DEFINITION #####################################################
 
 
-batch_start = 11000
-batch_end = 11020
+batch_start = 11700
+batch_end = 11720
 
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
@@ -20,7 +20,7 @@ batch_end = 11020
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 
-misc = [2,5,7,8,9,10,11]        # Defining all original classes which will be labelled miscellaneous
+misc = [2,5,7,8,9,11]        # Defining all original classes which will be labelled miscellaneous
 
 ########################################################################################################################
 
