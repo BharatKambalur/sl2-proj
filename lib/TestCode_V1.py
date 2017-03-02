@@ -20,8 +20,8 @@ from sklearn.preprocessing import normalize
 ############################################# PARAMETER DEFINITION #####################################################
 
 
-batch_start = 13000
-batch_end = 13020
+batch_start = 6000
+batch_end = 6020
 
 error_dir = '..\dataset\SYNTHIA_RAND_CVPR16\ERROR\\'
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
@@ -30,6 +30,7 @@ gt_dir = '..\dataset\SYNTHIA_RAND_CVPR16\GTTXT\\'
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
 label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 model_dir= '..\dataset\SYNTHIA_RAND_CVPR16\MODEL\\'
+predicted_dir= '..\dataset\SYNTHIA_RAND_CVPR16\PREDICTED\\'
 
 misc = [2,5,7,8,9,11]        # Defining all original classes which will be labelled miscellaneous
 orgi = [-1,0,1,3,4,6,10]
@@ -38,7 +39,7 @@ color={'0':(0,0,0),'1':(132,112,255),'3':(160,160,160),'4':(218,165,32),'6':(0,1
 ########################################################################################################################
 
 list_files_Feat = os.listdir(feat_dir)
-list_files_Feat.sort()
+list_files_Feat.sort()   
 
 list_files_GT= os.listdir(gt_dir)
 list_files_GT.sort()
@@ -93,8 +94,9 @@ for im_no in range(batch_start, batch_end+1):
         spat_cord_seg = np.array(np.where(segments == segVal))
         img_Predict[spat_cord_seg[0,:],spat_cord_seg[1,:]]=PredictY[segVal]
         img[spat_cord_seg[0,:],spat_cord_seg[1,:],:]=color[str(int(PredictY[segVal]))]
-        
-                
+    
+    predicted_path = predicted_dir  +  list_files_RGB[im_no].rsplit(".",1)[0] +'_predicted_output' + '.npy'    
+    np.save(predicted_path , PredictY)            
                     
     Overall_Error += (np.sum(img_Predict!=gt))/(720*960)
     
@@ -106,6 +108,7 @@ for im_no in range(batch_start, batch_end+1):
     confusion += normalize(temp_confusion, axis=1, norm='l1')          
 
 confusion = confusion/(batch_end-batch_start+1)
+Overall_Error=Overall_Error/(batch_end-batch_start+1)
 print(Overall_Error/(batch_end-batch_start+1))
 
 error_path = error_dir  +  model_name.rsplit(".",1)[0] +'_overall_error' + '.npy'
