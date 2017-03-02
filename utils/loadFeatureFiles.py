@@ -6,11 +6,12 @@ from skimage import color, io
 from skimage.filters import gabor_kernel
 from scipy.fftpack import dct
 from scipy.signal import fftconvolve
+import pandas as pd
 
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
-batch_end = 3
+batch_end = 3999
 
 #rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 #SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
