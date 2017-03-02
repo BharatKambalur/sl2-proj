@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Feb 23 15:09:16 2017
+Created on Wed Mar  1 21:49:23 2017
 
 @author: sthar
 """
 
 import os
 import time
+import numpy as np
 import cv2
 import numpy as np
 from skimage import io
@@ -17,11 +18,13 @@ import pickle
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 
+##CHANGE MODEL AS DESIRED
+from sklearn.ensemble import GradientBoostingClassifier
+
 ############################################# PARAMETER DEFINITION #####################################################
 
-
-batch_start = 6000
-batch_end = 6020
+batch_start = 0
+batch_end = 999
 
 error_dir = '..\dataset\SYNTHIA_RAND_CVPR16\ERROR\\'
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
@@ -32,11 +35,51 @@ label_dir = '..\dataset\SYNTHIA_RAND_CVPR16\LABEL\\'
 model_dir= '..\dataset\SYNTHIA_RAND_CVPR16\MODELS\\'
 predicted_dir= '..\dataset\SYNTHIA_RAND_CVPR16\PREDICTED\\'
 
-misc = [2,5,7,8,9,11]        # Defining all original classes which will be labelled miscellaneous
-orgi = [-1,0,1,3,4,6,10]
+misc = [2,5,7,8,9,11,10]        # Defining all original classes which will be labelled miscellaneous
+orgi = [-1,0,1,3,4,6]
 Overall_Error=0
 color={'0':(0,0,0),'1':(132,112,255),'3':(160,160,160),'4':(218,165,32),'6':(0,128,0),'-1':(255,255,255),'10':(145,120,50),'2':(10,150,10)}
 ########################################################################################################################
+
+list_files_RGB = os.listdir(rgb_dir)
+list_files_RGB.sort()
+
+#np.random.seed(0)
+test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
+num_feat = test_feat_array.shape[1]
+BigX = np.empty([0,num_feat])
+BigY = np.empty([0])
+
+for im_no in range(batch_start, batch_end+1):
+    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+    X = np.load(feat_path)
+    Y = np.load(label_path)
+    BigX = np.vstack((BigX,X))
+    BigY = np.concatenate((BigY,Y))
+
+print("Loaded Data Successfully. Beginning Training Now")
+##################################################################################################
+###MAKE AND SAVE MODEL
+for i in misc:
+        BigY[BigY == i]=0
+
+
+model= GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
+start_train_time = time.time()
+model.fit(BigX, BigY)
+end_train_time = time.time()
+print("Time taken to train model:{}".format(end_train_time-start_train_time))
+model.score(BigX, BigY)
+model_name='GaussianBoostClassifier_Model.sav'
+filename='..\dataset\SYNTHIA_RAND_CVPR16\MODELS\\'+model_name
+pickle.dump(model,open(filename,'wb'))
+print("Model Saved Successfully")
+
+
+#######################################################################################################
+####TEST
+print("Beginning Testing Now")
 
 list_files_Feat = os.listdir(feat_dir)
 list_files_Feat.sort()   
@@ -56,15 +99,17 @@ list_files_RGB.sort()
 #######
 
 ###LOAD MODEL
-model_name = 'trialmodel.sav'
-model_file=model_dir + model_name
+batch_start = 1000
+batch_end = 1499
+
+model_file=filename
 load_model=pickle.load(open(model_file,'rb'))
 
 ################
 img=np.zeros([720,960,3],dtype=np.uint8)
 
-confusion = np.zeros([7,7])
-temp_confusion = np.zeros([7,7])
+confusion = np.zeros([len(orgi),len(orgi)])
+temp_confusion = np.zeros([len(orgi),len(orgi)])
 for im_no in range(batch_start, batch_end+1):
     ##NOTE!!! FEATURE NUMBERING STARTS FROM 0: SUBTRACT OUT EXTRA
     gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.txt'
@@ -100,9 +145,9 @@ for im_no in range(batch_start, batch_end+1):
                     
     Overall_Error += (np.sum(img_Predict!=gt))/(720*960)
     
-    for ind_gt in range(0,6):
+    for ind_gt in range(0,len(orgi)-1):
             spat_cord_class = np.array(np.where(gt == orgi[ind_gt]))
-            for ind_pred in range(0,6):
+            for ind_pred in range(0,len(orgi)-1):
                 temp_confusion[ind_gt,ind_pred] = np.sum(img_Predict[spat_cord_class[0,:],spat_cord_class[1,:]] == orgi[ind_pred])
                                                                    
     confusion += normalize(temp_confusion, axis=1, norm='l1')          
@@ -118,5 +163,4 @@ np.save(error_path , Overall_Error)
 np.save(confusion_path , confusion) 
 
 
-plt.imshow(confusion)
-#fig = plt.imshow(img)  
+#plt.imshow(confusion)
