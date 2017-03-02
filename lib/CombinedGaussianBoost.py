@@ -18,8 +18,9 @@ import pickle
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 
-##CHANGE MODEL AS DESIRED
+##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
 from sklearn.ensemble import GradientBoostingClassifier
+model_name='GaussianBoostClassifier_Model.sav'
 
 ############################################# PARAMETER DEFINITION #####################################################
 
@@ -71,7 +72,6 @@ model.fit(BigX, BigY)
 end_train_time = time.time()
 print("Time taken to train model:{}".format(end_train_time-start_train_time))
 model.score(BigX, BigY)
-model_name='GaussianBoostClassifier_Model.sav'
 filename='..\dataset\SYNTHIA_RAND_CVPR16\MODELS\\'+model_name
 pickle.dump(model,open(filename,'wb'))
 print("Model Saved Successfully")
