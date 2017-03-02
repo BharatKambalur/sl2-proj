@@ -17,9 +17,11 @@ import pickle
 import matplotlib.pyplot as plt
 ############################################# PARAMETER DEFINITION #####################################################
 
-batch_end = 5001
 
-#rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
+batch_start = 11000
+batch_end = 11020
+
+rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
 gt_dir = '..\dataset\SYNTHIA_RAND_CVPR16\GTTXT\\'
 feat_dir = '..\dataset\SYNTHIA_RAND_CVPR16\FEAT\\'
@@ -43,6 +45,9 @@ list_files_Label.sort()
 list_files_SLIC = os.listdir(SLIC_dir)
 list_files_SLIC.sort()
 
+list_files_RGB = os.listdir(rgb_dir)
+list_files_RGB.sort()
+
 #######
 
 ###LOAD MODEL
@@ -54,16 +59,21 @@ img=np.zeros([720,960,3],dtype=np.uint8)
 
 for im_no in range(batch_start, batch_end+1):
     ##NOTE!!! FEATURE NUMBERING STARTS FROM 0: SUBTRACT OUT EXTRA
-    feat_path = feat_dir + list_files_Feat[im_no-batch_start]
-    label_path = label_dir + list_files_Label[im_no-batch_start].split(".",1)[0]+".npy"
+    gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.txt'
+    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     TestX = np.load(feat_path)
     TestY = np.load(label_path)
     
     
-    gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.txt'
+    
     gt = np.loadtxt(gt_path)
     
-    slic_path = SLIC_dir + list_files_SLIC[im_no].rsplit(".",1)[0] + '.npy'
+
+    for i in misc:
+        gt[gt == i] = 0
+
+    slic_path = SLIC_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     segments = np.load(slic_path)
     
     for i in misc:

@@ -12,6 +12,7 @@ from scipy.signal import fftconvolve
 batch_start = 3167
 batch_end = 3999
 
+
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
 gt_dir = '..\dataset\SYNTHIA_RAND_CVPR16\GTTXT\\'

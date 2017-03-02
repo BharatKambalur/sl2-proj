@@ -747,13 +747,12 @@ model.score(BigX2, BigY2)
 predicted= model.predict(BigX1)
 print(np.sum(predicted!=BigY1))
 img=np.zeros([720,960,3],dtype=np.uint8)
-img_Predict=np.zeros([720,960])
+
 #color={'0':(0,255,0),'1':(255,112,132),'3':(160,160,160),'4':(255,255,255),'6':(124,252,0),'-1':(0,0,0)}
 color={'0':(0,0,0),'1':(132,112,255),'3':(160,160,160),'4':(218,165,32),'6':(0,128,0),'-1':(255,255,255),'10':(145,120,50),'2':(10,150,10)}
 for (i, segVal) in enumerate(np.unique(segments)):
    spat_cord_seg = np.array(np.where(segments == segVal))
    img[spat_cord_seg[0,:],spat_cord_seg[1,:],:]=color[str(int(BigY1[segVal]))]
-   img_Predict[spat_cord_seg[0,:],spat_cord_seg[1,:]]=predicted[segVal]
 
 
 fig = plt.imshow(img)  
