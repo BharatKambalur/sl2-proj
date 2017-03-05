@@ -1,29 +1,20 @@
 
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  1 21:49:23 2017
-
-@author: sthar
-"""
 
 import os
 import time
 import numpy as np
 import pickle
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import normalize
 from sklearn import preprocessing
-from sklearn.decomposition import PCA
-
+from sklearn.preprocessing import normalize
 
 ##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
-from sklearn.ensemble import RandomForestClassifier
-model_name='PCARandomForestClassifier_Model.sav'
+from sklearn.linear_model import LogisticRegression
+model_name='Logistic_Regression.sav'
 
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
-batch_end = 20
+batch_end = 999
 
 error_dir = '..\dataset\SYNTHIA_RAND_CVPR16\ERROR\\'
 rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\'    # Location of folder containing the RGB images of the dataset
@@ -46,44 +37,29 @@ list_files_RGB.sort()
 #np.random.seed(0)
 test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
 num_feat = test_feat_array.shape[1]
-
 BigX = np.empty([0,num_feat])
 BigY = np.empty([0])
 
-for im_no in range(batch_start, batch_end+1):
-    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    X = np.load(feat_path)
-    Y = np.load(label_path)
-    BigX = np.vstack((BigX,X))
-    #BigY = np.concatenate((BigY,Y))
-    print(im_no)
-
-print("Loaded Data Successfully. Beginning Training Now")
-##################################################################################################
-###MAKE AND SAVE MODEL
 BigY=np.load(model_dir+'BigY.npy')
-BigX_load=np.load(model_dir+'BigX.npy')
+
+BigX=np.load(model_dir+'BigX.npy')
+
+std_scale = preprocessing.StandardScaler().fit(BigX)
+X_train_std = std_scale.transform(BigX)
+
 
 for i in misc:
         BigY[BigY == i]=0
 
+
+print("Loaded Data Successfully. Beginning Training Now")
 ##################################################################################################
-###PCA
-
-#Normalize Train Data
-std_scale = preprocessing.StandardScaler().fit(BigX_load)
-X_train_std = std_scale.transform(BigX_load)
-
-
-##ACTUAL PCA
-pca = PCA(n_components=100).fit(BigX)
-X_train_std = pca.transform(X_train_std)
+###MAKE AND SAVE MODEL
 
 
 
-####################################################################################################3
-model= RandomForestClassifier()
+
+model= LogisticRegression(solver='sag', max_iter=100, random_state=42, multi_class='multinomial').fit(BigX, BigY)
 start_train_time = time.time()
 model.fit(X_train_std, BigY)
 end_train_time = time.time()
@@ -129,31 +105,23 @@ confusion = np.zeros([len(orgi),len(orgi)])
 temp_confusion = np.zeros([len(orgi),len(orgi)])
 for im_no in range(batch_start, batch_end+1):
     ##NOTE!!! FEATURE NUMBERING STARTS FROM 0: SUBTRACT OUT EXTRA
-    print(im_no)
     gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.txt'
     feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     slic_path = SLIC_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     
     TestX = np.load(feat_path)
-    X_test_std = std_scale.transform(TestX)
-    
-    
-    ####PCA ON Training Data
-    X_test_std = pca.transform(X_test_std)
     
     TestY = np.load(label_path)
     
     gt = np.loadtxt(gt_path)    
-    for i in misc:
-        gt[gt == i] = 0
-
+    
     segments = np.load(slic_path)
     
     for i in misc:
         gt[gt == i] = 0
         TestY[TestY == i]=0
-
+    X_test_std = std_scale.transform(TestX)
     PredictY= load_model.predict(X_test_std)
     
     img_Predict=np.zeros([720,960])
