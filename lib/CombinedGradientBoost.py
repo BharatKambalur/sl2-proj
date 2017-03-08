@@ -20,7 +20,7 @@ from sklearn.preprocessing import normalize
 
 ##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
 from sklearn.ensemble import GradientBoostingClassifier
-model_name='GaussianBoostClassifier_Model.sav'
+model_name='GradientBoostClassifier_Model_200.sav'
 
 ############################################# PARAMETER DEFINITION #####################################################
 
@@ -46,18 +46,21 @@ list_files_RGB = os.listdir(rgb_dir)
 list_files_RGB.sort()
 
 #np.random.seed(0)
-test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
-num_feat = test_feat_array.shape[1]
-BigX = np.empty([0,num_feat])
-BigY = np.empty([0])
+#test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
+#num_feat = test_feat_array.shape[1]
+#BigX = np.empty([0,num_feat])
+#BigY = np.empty([0])
 
-for im_no in range(batch_start, batch_end+1):
-    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    X = np.load(feat_path)
-    Y = np.load(label_path)
-    BigX = np.vstack((BigX,X))
-    BigY = np.concatenate((BigY,Y))
+#for im_no in range(batch_start, batch_end+1):
+#    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    X = np.load(feat_path)
+#    Y = np.load(label_path)
+#    BigX = np.vstack((BigX,X))
+#    BigY = np.concatenate((BigY,Y))
+
+BigX = np.load(model_dir + 'bigX.npy')
+BigY = np.load(model_dir + 'bigY.npy')
 
 print("Loaded Data Successfully. Beginning Training Now")
 ##################################################################################################
@@ -66,7 +69,7 @@ for i in misc:
         BigY[BigY == i]=0
 
 
-model= GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
+model= GradientBoostingClassifier(n_estimators=200, learning_rate=1.0, max_depth=1, random_state=0)
 start_train_time = time.time()
 model.fit(BigX, BigY)
 end_train_time = time.time()
