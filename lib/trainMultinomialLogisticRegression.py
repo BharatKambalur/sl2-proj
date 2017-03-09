@@ -9,7 +9,7 @@ from sklearn.preprocessing import normalize
 
 ##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
 from sklearn.linear_model import LogisticRegression
-model_name='Logistic_Regression.sav'
+model_name='Logistic_Regression_300.sav'
 
 ############################################# PARAMETER DEFINITION #####################################################
 
@@ -59,7 +59,7 @@ print("Loaded Data Successfully. Beginning Training Now")
 
 
 
-model= LogisticRegression(solver='sag', max_iter=100, random_state=42, multi_class='multinomial').fit(BigX, BigY)
+model= LogisticRegression(solver='sag', max_iter=1000, random_state=42, multi_class='ovr').fit(BigX, BigY)
 start_train_time = time.time()
 model.fit(X_train_std, BigY)
 end_train_time = time.time()
