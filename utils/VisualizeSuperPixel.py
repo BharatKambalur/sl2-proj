@@ -10,10 +10,10 @@ import time
 import os
 
 ########### PARAMETER DEFINITION #############
-rgb_dir = '..\dataset\SYNTHIA_RAND_CVPR16\RGB\\' # Location of folder containing the RGB images of the dataset
-SLIC_dir = '..\dataset\SYNTHIA_RAND_CVPR16\SLIC\\'
+rgb_dir = '..\dataset\CITYSCAPE\RGB\\' # Location of folder containing the RGB images of the dataset
+SLIC_dir = '..\dataset\CITYSCAPE\SLIC\\'
 
-SLIC_File_Name = 'ap_000_02-11-2015_08-27-21_000068_2_Rand_2.npy'
+SLIC_File_Name = 'aachen_000000_000019_leftImg8bit.npy'
 
 ############################################
 
