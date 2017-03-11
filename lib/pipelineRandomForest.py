@@ -27,10 +27,14 @@ from sklearn.preprocessing import normalize
 
 ##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
 
-from sklearn import tree
+from sklearn.pipeline import Pipeline
+from sklearn.feature_selection import SelectFromModel
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 
-model_name='DecisionTreeClassifier_Model.sav'
-filename='..\dataset\SYNTHIA_RAND_CVPR16\MODELS\\'+model_name
+
+model_name='pipelineRandomForest_Model.sav'
+
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
@@ -55,31 +59,39 @@ list_files_RGB = os.listdir(rgb_dir)
 list_files_RGB.sort()
 
 #np.random.seed(0)
-test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
-num_feat = test_feat_array.shape[1]
-BigX = np.empty([0,num_feat])
-BigY = np.empty([0])
+#test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
+#num_feat = test_feat_array.shape[1]
 
-for im_no in range(batch_start, batch_end+1):
-    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    X = np.load(feat_path)
-    Y = np.load(label_path)
-    BigX = np.vstack((BigX,X))
-    BigY = np.concatenate((BigY,Y))
 
+#BigX = np.empty([0,num_feat])
+#BigY = np.empty([0])
+
+#for im_no in range(batch_start, batch_end+1):
+#    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    X = np.load(feat_path)
+#    Y = np.load(label_path)
+#    BigX = np.vstack((BigX,X))
+#    BigY = np.concatenate((BigY,Y))
+BigY  = np.load(model_dir + 'bigY.npy')
+BigX  = np.load(model_dir + 'bigX.npy')
 print("Loaded Data Successfully. Beginning Training Now")
 ##################################################################################################
 ###MAKE AND SAVE MODEL
 for i in misc:
         BigY[BigY == i]=0
 
-model = tree.DecisionTreeClassifier(criterion='gini') 
+
+model = Pipeline([
+  ('feature_selection', SelectFromModel(LinearSVC(penalty="l1",dual = False))),
+  ('classification', RandomForestClassifier())
+])
 start_train_time = time.time()
 model.fit(BigX, BigY)
 end_train_time = time.time()
 print("Time taken to train model:{}".format(end_train_time-start_train_time))
 model.score(BigX, BigY)
+filename='..\dataset\SYNTHIA_RAND_CVPR16\MODELS\\'+model_name
 pickle.dump(model,open(filename,'wb'))
 print("Model Saved Successfully")
 
@@ -87,6 +99,7 @@ print("Model Saved Successfully")
 #######################################################################################################
 ####TEST
 print("Beginning Testing Now")
+start_test_time = time.time()
 
 list_files_Feat = os.listdir(feat_dir)
 list_files_Feat.sort()   
@@ -168,6 +181,8 @@ confusion_path = error_dir  +  model_name.rsplit(".",1)[0] +'_confusion_error' +
 
 np.save(error_path , Overall_Error) 
 np.save(confusion_path , confusion) 
+end_test_time = time.time()
+print("Time taken to test model:{}".format(end_test_time-start_test_time))
 
 
 #plt.imshow(confusion)
