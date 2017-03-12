@@ -17,8 +17,8 @@ import sys
 rgb_dir = '..\dataset\CITYSCAPE\RGB\\' # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\CITYSCAPE\SLIC\\'
 
-list_start = 0
-list_end = 500
+list_start = 1001
+list_end = 1499
 
 numSegments = 2000
 

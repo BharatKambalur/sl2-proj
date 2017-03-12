@@ -16,12 +16,12 @@ from scipy.signal import fftconvolve
 
 ############################################# PARAMETER DEFINITION #####################################################
 
-batch_start = 5000
-batch_end = 5010
+batch_start = 601 
+batch_end = 900
 
 rgb_dir = '..\dataset\CITYSCAPE\RGB\\' # Location of folder containing the RGB images of the dataset
 SLIC_dir = '..\dataset\CITYSCAPE\SLIC\\'
-gt_dir = '..\dataset\CITYSCAPE\GTTXT\\'
+gt_dir = '..\dataset\CITYSCAPE\GT\\'
 feat_dir = '..\dataset\CITYSCAPE\FEAT\\'
 label_dir = '..\dataset\CITYSCAPE\LABEL\\'
 
@@ -49,10 +49,13 @@ start_time = time.time()
 list_files_RGB = os.listdir(rgb_dir)
 list_files_RGB.sort()
 
+list_files_GT = os.listdir(gt_dir)
+list_files_GT.sort()
+
 for im_no in range(batch_start, batch_end+1):
     rgb_path = rgb_dir + list_files_RGB[im_no]
     slic_path = SLIC_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    gt_path = gt_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.txt'
+    gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.png'
 
     if os.path.exists(rgb_path):
         im = io.imread(rgb_path)
@@ -65,14 +68,14 @@ for im_no in range(batch_start, batch_end+1):
         print('SLIC File Read Error. File Name : {}'.format(list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'))
 
     if os.path.exists(slic_path):
-        gt = np.loadtxt(gt_path)
+        gt = io.imread(gt_path)
     else:
-        print('GT Text File Read Error. File Name : {}'.format(list_files_RGB[im_no].rsplit(".",1)[0] + '.txt'))
+        print('GT File Read Error. File Name : {}'.format(list_files_RGB[im_no].rsplit(".",1)[0] + '.txt'))
 
     # Declaring empty arrays to store the generated features (BigX) and corresponding label (BigY)
     BigX=[]
     BigY=[]
-
+    print(im_no)
     # Converting image to HSV and Grayscale for further processing
     image_hsv = color.rgb2hsv(im)
     im_g = color.rgb2gray(im)
@@ -92,7 +95,7 @@ for im_no in range(batch_start, batch_end+1):
     for (i, segVal) in enumerate(np.unique(segments)):
 
         ########################### Code for DCT ################################
-
+        
         mask = np.zeros(im.shape[:2], dtype = "uint8")
         mask[segments == segVal] = 255
 
@@ -114,10 +117,10 @@ for im_no in range(batch_start, batch_end+1):
            cY=3
 
         if(cX+5>2048):
-           cX=954
+           cX=2042
 
         if(cY+5>1024):
-            cY=714
+            cY=1018
 
         DCT_Patch = (dct(dct(im_g[cY-3:cY+5,cX-3:cX+5], axis=0), axis=1).ravel()).reshape(1,64).ravel()
 
