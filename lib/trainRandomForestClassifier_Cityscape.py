@@ -19,7 +19,7 @@ model_name='RandomForestClassifier_Model_Cityscape.sav'
 ############################################# PARAMETER DEFINITION #####################################################
 
 batch_start = 0
-batch_end = 599
+batch_end = 699
 
 error_dir = '..\dataset\CITYSCAPE\ERROR\\'
 rgb_dir = '..\dataset\CITYSCAPE\RGB\\' # Location of folder containing the RGB images of the dataset
@@ -99,7 +99,7 @@ list_files_RGB.sort()
 #######
 
 ###LOAD MODEL
-batch_start = 600
+batch_start = 700
 batch_end = 900
 
 model_file=filename
