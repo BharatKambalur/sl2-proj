@@ -1,5 +1,6 @@
 dataset/
 .idea/
+CitscapesTestData/
 
 @@ -0,0 +1,43 @@
 # Windows image file caches
