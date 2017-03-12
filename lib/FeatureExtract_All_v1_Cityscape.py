@@ -67,7 +67,7 @@ for im_no in range(batch_start, batch_end+1):
     else:
         print('SLIC File Read Error. File Name : {}'.format(list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'))
 
-    if os.path.exists(slic_path):
+    if os.path.exists(gt_path):
         gt = io.imread(gt_path)
     else:
         print('GT File Read Error. File Name : {}'.format(list_files_RGB[im_no].rsplit(".",1)[0] + '.txt'))
