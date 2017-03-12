@@ -11,7 +11,7 @@ from skimage import io
 import numpy as np
 import time
 import os
-import sys
+
 
 ########### PARAMETER DEFINITION #############
 rgb_dir = '..\dataset\CITYSCAPE\RGB\\' # Location of folder containing the RGB images of the dataset

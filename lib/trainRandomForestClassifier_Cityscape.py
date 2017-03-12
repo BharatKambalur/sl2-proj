@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar  2 00:28:59 2017
-
-@author: sthar
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  1 21:49:23 2017
-
-@author: sthar
-"""
 
 import os
 import time
@@ -52,6 +39,10 @@ color={'0':(0,0,0),'23':(132,112,255),'7':(160,160,160),'8':(218,165,32),'21':(0
 list_files_RGB = os.listdir(rgb_dir)
 list_files_RGB.sort()
 
+list_files_GT = os.listdir(gt_dir)
+list_files_GT.sort()
+
+
 #np.random.seed(0)
 test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
 num_feat = test_feat_array.shape[1]
@@ -65,6 +56,7 @@ for im_no in range(batch_start, batch_end+1):
     Y = np.load(label_path)
     BigX = np.vstack((BigX,X))
     BigY = np.concatenate((BigY,Y))
+    print(im_no)
 
 print("Loaded Data Successfully. Beginning Training Now")
 ##################################################################################################
@@ -108,7 +100,7 @@ list_files_RGB.sort()
 
 ###LOAD MODEL
 batch_start = 600
-batch_end = 899
+batch_end = 900
 
 model_file=filename
 load_model=pickle.load(open(model_file,'rb'))
