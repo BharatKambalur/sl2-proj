@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Wed Mar  1 21:49:23 2017
 
 @author: sthar
@@ -19,8 +26,14 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 
 ##!!!!!!!!!!!!!!!CHANGE MODEL AS DESIRED
-from sklearn.ensemble import GradientBoostingClassifier
-model_name='GaussianBoostClassifier_Model.sav'
+
+from sklearn.pipeline import Pipeline
+from sklearn.feature_selection import SelectFromModel
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+
+
+model_name='pipelineRandomForest_Model.sav'
 
 ############################################# PARAMETER DEFINITION #####################################################
 
@@ -46,19 +59,22 @@ list_files_RGB = os.listdir(rgb_dir)
 list_files_RGB.sort()
 
 #np.random.seed(0)
-test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
-num_feat = test_feat_array.shape[1]
-BigX = np.empty([0,num_feat])
-BigY = np.empty([0])
+#test_feat_array=np.load(feat_dir + list_files_RGB[0].rsplit(".",1)[0] + '.npy')
+#num_feat = test_feat_array.shape[1]
 
-for im_no in range(batch_start, batch_end+1):
-    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
-    X = np.load(feat_path)
-    Y = np.load(label_path)
-    BigX = np.vstack((BigX,X))
-    BigY = np.concatenate((BigY,Y))
 
+#BigX = np.empty([0,num_feat])
+#BigY = np.empty([0])
+
+#for im_no in range(batch_start, batch_end+1):
+#    feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
+#    X = np.load(feat_path)
+#    Y = np.load(label_path)
+#    BigX = np.vstack((BigX,X))
+#    BigY = np.concatenate((BigY,Y))
+BigY  = np.load(model_dir + 'bigY.npy')
+BigX  = np.load(model_dir + 'bigX.npy')
 print("Loaded Data Successfully. Beginning Training Now")
 ##################################################################################################
 ###MAKE AND SAVE MODEL
@@ -66,7 +82,10 @@ for i in misc:
         BigY[BigY == i]=0
 
 
-model= GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
+model = Pipeline([
+  ('feature_selection', SelectFromModel(LinearSVC(penalty="l1",dual = False))),
+  ('classification', RandomForestClassifier())
+])
 start_train_time = time.time()
 model.fit(BigX, BigY)
 end_train_time = time.time()
@@ -80,6 +99,7 @@ print("Model Saved Successfully")
 #######################################################################################################
 ####TEST
 print("Beginning Testing Now")
+start_test_time = time.time()
 
 list_files_Feat = os.listdir(feat_dir)
 list_files_Feat.sort()   
@@ -107,12 +127,12 @@ load_model=pickle.load(open(model_file,'rb'))
 
 ################
 img=np.zeros([720,960,3],dtype=np.uint8)
-
+Overall_Error=0
 confusion = np.zeros([len(orgi),len(orgi)])
 temp_confusion = np.zeros([len(orgi),len(orgi)])
 for im_no in range(batch_start, batch_end+1):
     ##NOTE!!! FEATURE NUMBERING STARTS FROM 0: SUBTRACT OUT EXTRA
-    gt_path = gt_dir + list_files_GT[im_no].rsplit(".",1)[0] + '.txt'
+    gt_path = gt_dir + list_files_GT[im_no].rsplit(".", 1)[0] + '.txt'
     feat_path = feat_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     label_path = label_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
     slic_path = SLIC_dir + list_files_RGB[im_no].rsplit(".",1)[0] + '.npy'
@@ -145,9 +165,9 @@ for im_no in range(batch_start, batch_end+1):
                     
     Overall_Error += (np.sum(img_Predict!=gt))/(720*960)
     
-    for ind_gt in range(0,len(orgi)-1):
+    for ind_gt in range(0,len(orgi)):
             spat_cord_class = np.array(np.where(gt == orgi[ind_gt]))
-            for ind_pred in range(0,len(orgi)-1):
+            for ind_pred in range(0,len(orgi)):
                 temp_confusion[ind_gt,ind_pred] = np.sum(img_Predict[spat_cord_class[0,:],spat_cord_class[1,:]] == orgi[ind_pred])
                                                                    
     confusion += normalize(temp_confusion, axis=1, norm='l1')          
@@ -161,6 +181,8 @@ confusion_path = error_dir  +  model_name.rsplit(".",1)[0] +'_confusion_error' +
 
 np.save(error_path , Overall_Error) 
 np.save(confusion_path , confusion) 
+end_test_time = time.time()
+print("Time taken to test model:{}".format(end_test_time-start_test_time))
 
 
 #plt.imshow(confusion)
